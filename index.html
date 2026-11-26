@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>한우리 안산단원지부 수료증 만들기</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { --or:#ef7d00; --or2:#fff4e6; --ink:#2b2b2b; --mute:#777; --line:#e6e0d8; --err:#d93025; --warn:#b26a00; --info:#5f6b7a; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif; color:var(--ink); background:#faf8f5; line-height:1.55; }
+  header { background:var(--or); color:#fff; padding:22px 20px 18px; }
+  header h1 { margin:0; font-size:22px; }
+  header p { margin:4px 0 0; opacity:.92; font-size:14px; }
+  main { max-width:980px; margin:0 auto; padding:18px 16px 60px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:16px; }
+  .step { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:var(--or); color:#fff; font-weight:700; font-size:14px; margin-right:8px; }
+  h2 { font-size:17px; margin:0 0 10px; display:flex; align-items:center; }
+  .muted { color:var(--mute); font-size:14px; }
+  button, .btn { font:inherit; border:0; border-radius:10px; padding:10px 16px; cursor:pointer; background:var(--or); color:#fff; font-weight:600; text-decoration:none; display:inline-block; }
+  button.ghost, .btn.ghost { background:#fff; color:var(--or); border:1.5px solid var(--or); }
+  button:disabled { opacity:.45; cursor:not-allowed; }
+  .drop { display:block; border:2px dashed #e9c79e; background:var(--or2); border-radius:12px; padding:26px; text-align:center; cursor:pointer; }
+  .drop.over { border-color:var(--or); }
+  .drop b { color:var(--or); }
+  table { border-collapse:collapse; width:100%; font-size:14px; }
+  th, td { border-bottom:1px solid var(--line); padding:6px 6px; text-align:left; vertical-align:top; }
+  th { background:#f6f2ec; font-weight:600; position:sticky; top:0; z-index:1; }
+  td[contenteditable] { outline:none; border-radius:4px; }
+  td[contenteditable]:focus { background:#fff8ec; box-shadow:inset 0 0 0 1.5px var(--or); }
+  .tablewrap { max-height:520px; overflow:auto; border:1px solid var(--line); border-radius:10px; }
+  .w { font-size:12px; display:block; }
+  .w.err { color:var(--err); } .w.warn { color:var(--warn); } .w.info { color:var(--info); }
+  tr.err td { background:#fdecea; } tr.warn td { background:#fff7e6; }
+  .icon { background:none; color:var(--mute); padding:2px 6px; font-weight:400; }
+  .icon:hover { color:var(--or); }
+  .sum { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 4px; }
+  .chip { background:var(--or2); border:1px solid #f1d3ad; border-radius:999px; padding:4px 12px; font-size:14px; }
+  .total { font-size:18px; font-weight:700; margin-top:8px; }
+  .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .filter { font-size:14px; display:flex; gap:6px; align-items:center; }
+  select, input[type=text], input[type=number] { font:inherit; padding:7px 9px; border:1px solid #d9d2c8; border-radius:8px; }
+  .notice { background:#f3f6f9; border-radius:10px; padding:10px 12px; font-size:14px; color:#44505c; }
+  .alert { border-radius:10px; padding:10px 12px; font-size:14px; margin:10px 0; }
+  .alert.err { background:#fdecea; color:var(--err); } .alert.warn { background:#fff4e0; color:#8a5200; }
+  .hidden { display:none !important; }
+  #modal { position:fixed; inset:0; background:rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; z-index:9; padding:16px; }
+  #modal .box { background:#fff; border-radius:14px; width:min(560px,100%); height:min(820px,92vh); display:flex; flex-direction:column; overflow:hidden; }
+  #modal .bar { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-bottom:1px solid var(--line); }
+  #modal iframe { flex:1; border:0; width:100%; }
+  .progress { height:8px; background:#f0e8dd; border-radius:99px; overflow:hidden; margin-top:10px; }
+  .progress i { display:block; height:100%; width:0; background:var(--or); transition:width .2s; }
+  footer { text-align:center; color:var(--mute); font-size:13px; padding:20px; }
+  ol { padding-left:20px; margin:6px 0; } li { margin:2px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>수료증 만들기</h1>
+  <p>한우리독서토론논술 안산단원지부 · 엑셀 명단을 넣으면 한 명당 한 장씩 수료증 PDF가 만들어져요.</p>
+</header>
+<main>
+
+  <section class="card">
+    <h2><span class="step">1</span>엑셀 양식 받기</h2>
+    <div class="row">
+      <a class="btn ghost" href="assets/수료증_명단_양식.xlsx" download>엑셀 양식 내려받기</a>
+      <span class="muted">칸: 이름 · 학교 · 학년 · 수료 단계 · 비고</span>
+    </div>
+    <ol class="muted" style="margin-top:10px">
+      <li>한 줄에 한 명씩 써 주세요. 학교는 "양지초"처럼 줄여 써도 "양지초등학교"로 바뀌어요.</li>
+      <li>학년은 비워 두면 학교만 들어가요. 숫자만 써도 돼요(3 → 3학년).</li>
+      <li>단계는 "소1", "몰독A", "새싹1"처럼 줄여 써도 정식 이름으로 바뀌어요.</li>
+      <li>두 과정을 함께 수료했으면 비고에 "몰입독서A+어휘리더2"처럼 써 주세요. 과정마다 한 장씩 만들어져요.</li>
+      <li>중3 졸업생은 단계에 "초·중등 논술" 또는 "중등 논술"을 써 주세요.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2><span class="step">2</span>명단 엑셀 올리기</h2>
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept=".xlsx,.xls,.csv,.numbers" class="hidden">
+      <div><b>여기를 눌러 엑셀 파일을 고르거나</b>, 파일을 끌어다 놓아 주세요.</div>
+      <div class="muted" id="fileName" style="margin-top:6px">명단은 이 컴퓨터 안에서만 처리되고 어디에도 저장되지 않아요.</div>
+    </label>
+    <div id="loadMsg"></div>
+  </section>
+
+  <section class="card hidden" id="reviewCard">
+    <h2><span class="step">3</span>명단 확인하기</h2>
+    <p class="muted" style="margin-top:0">칸을 눌러 바로 고칠 수 있어요. 색이 칠해진 줄을 먼저 확인해 주세요.</p>
+    <div id="alerts"></div>
+    <div class="row" style="justify-content:space-between;margin-bottom:8px">
+      <div class="filter">
+        <label>시트 <select id="sheetSel"></select></label>
+        <label><input type="checkbox" id="onlyWarn"> 확인할 줄만 보기</label>
+      </div>
+      <button class="ghost" id="addRow">+ 한 줄 추가</button>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th style="width:40px">#</th><th>이름</th><th>학교</th><th style="width:80px">학년</th><th>수료 단계</th><th style="width:96px"></th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="sum" id="sum"></div>
+    <div class="row" style="justify-content:space-between">
+      <div class="total" id="total"></div>
+      <label class="filter">장당 <input type="number" id="price" value="500" min="0" step="50" style="width:90px">원</label>
+    </div>
+  </section>
+
+  <section class="card hidden" id="makeCard">
+    <h2><span class="step">4</span>수료증 PDF 저장하기</h2>
+    <div class="notice">수료일 <b id="dateText"></b> (매년 12월 1일 고정) · 하단 "한우리독서토론논술 안산단원지부 / 지부장 이미진"과 지부장 도장이 함께 들어가요.</div>
+    <div class="row" style="margin-top:12px">
+      <label class="filter">파일 이름 <input type="text" id="outName" style="width:260px"></label>
+      <button id="makeBtn">수료증 PDF 저장하기</button>
+    </div>
+    <div class="progress hidden" id="prog"><i></i></div>
+    <div id="makeMsg" class="muted" style="margin-top:8px"></div>
+    <div class="notice" style="margin-top:12px">📮 저장한 PDF를 열어 이름·학교·단계를 한 번 더 확인한 뒤, <b>지부장님께 카카오톡 개인톡이나 메일로 보내 주세요.</b></div>
+  </section>
+
+</main>
+<footer>한우리독서토론논술 안산단원지부 · 031-413-1919</footer>
+
+<div id="modal" class="hidden">
+  <div class="box">
+    <div class="bar"><b id="modalTitle">미리보기</b><button class="icon" id="modalClose" style="font-size:20px">✕</button></div>
+    <iframe id="modalFrame" title="수료증 미리보기"></iframe>
+  </div>
+</div>
+
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script>window.XLSX || document.write('<script src="lib/xlsx.full.min.js"><\/script>')</script>
+<script src="lib/pdf-lib.min.js"></script>
+<script src="lib/fontkit.umd.min.js"></script>
+<script src="cert.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var certs = [], sheets = [], baseName = "수료증";
+  var YEAR = Cert.certYear();
+  $("dateText").textContent = YEAR + "년 12월 1일";
+
+  // ---------- 파일 읽기 ----------
+  var drop = $("drop");
+  ["dragenter", "dragover"].forEach(function (e) { drop.addEventListener(e, function (ev) { ev.preventDefault(); drop.classList.add("over"); }); });
+  ["dragleave", "drop"].forEach(function (e) { drop.addEventListener(e, function (ev) { ev.preventDefault(); drop.classList.remove("over"); }); });
+  drop.addEventListener("drop", function (ev) { if (ev.dataTransfer.files[0]) readFile(ev.dataTransfer.files[0]); });
+  $("file").addEventListener("change", function () { if (this.files[0]) readFile(this.files[0]); this.value = ""; });
+
+  function readFile(f) {
+    $("loadMsg").innerHTML = "";
+    baseName = f.name.replace(/\.[^.]+$/, "");
+    $("fileName").textContent = "📄 " + f.name;
+    var r = new FileReader();
+    r.onload = function () {
+      try {
+        var wb = XLSX.read(new Uint8Array(r.result), { type: "array" });
+        var list = [], used = [];
+        wb.SheetNames.forEach(function (n) {
+          if (/예시|안내|요약/.test(n)) return;
+          var rows = XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, defval: "", raw: false });
+          var c = Cert.rowsToCerts(rows, n);
+          if (c && c.length) { list = list.concat(c); used.push(n); }
+        });
+        if (!list.length) {
+          $("loadMsg").innerHTML = '<div class="alert err">명단을 찾지 못했어요. 첫 줄에 "이름"과 "수료 단계"(또는 "단계", "과정") 칸 제목이 있는지 확인해 주세요.</div>';
+          return;
+        }
+        certs = list; sheets = used;
+        $("outName").value = baseName + " 수료증";
+        var sel = $("sheetSel"); sel.innerHTML = "";
+        if (used.length > 1) {
+          sel.add(new Option("전체 (" + used.length + "개 시트)", ""));
+          used.forEach(function (n) { sel.add(new Option(n, n)); });
+          sel.parentNode.classList.remove("hidden");
+        } else sel.parentNode.classList.add("hidden");
+        $("reviewCard").classList.remove("hidden");
+        $("makeCard").classList.remove("hidden");
+        refresh();
+        $("reviewCard").scrollIntoView({ behavior: "smooth" });
+      } catch (e) {
+        console.error(e);
+        $("loadMsg").innerHTML = '<div class="alert err">파일을 읽지 못했어요. 엑셀(.xlsx) 파일인지 확인해 주세요.</div>';
+      }
+    };
+    r.readAsArrayBuffer(f);
+  }
+
+  // ---------- 표 ----------
+  function visible() {
+    var s = $("sheetSel").value;
+    return certs.filter(function (c) { return !s || c.sheet === s; });
+  }
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (m) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]; }); }
+
+  function refresh() {
+    Cert.checkCerts(certs);
+    var list = visible(), only = $("onlyWarn").checked;
+    var tb = $("tbody"), html = "";
+    list.forEach(function (c, i) {
+      var lv = c.warn.some(function (w) { return w.lv === "err"; }) ? "err" : c.warn.some(function (w) { return w.lv === "warn"; }) ? "warn" : "";
+      if (only && !c.warn.length) return;
+      var idx = certs.indexOf(c);
+      var ws = c.warn.map(function (w) { return '<span class="w ' + w.lv + '">' + esc(w.t) + "</span>"; }).join("");
+      html += '<tr class="' + lv + '" data-i="' + idx + '"><td class="muted">' + (i + 1) + "</td>" +
+        '<td contenteditable data-k="name">' + esc(c.name) + "</td>" +
+        '<td contenteditable data-k="school">' + esc(c.school) + "</td>" +
+        '<td contenteditable data-k="grade">' + esc(c.grade) + "</td>" +
+        '<td><span contenteditable data-k="course" style="display:block;outline:none">' + esc(c.course) + "</span>" + ws + "</td>" +
+        '<td style="white-space:nowrap"><button class="icon" data-act="view" title="미리보기">보기</button><button class="icon" data-act="del" title="이 줄 빼기">빼기</button></td></tr>';
+    });
+    tb.innerHTML = html || '<tr><td colspan="6" class="muted" style="text-align:center;padding:20px">확인할 줄이 없어요 👍</td></tr>';
+
+    // 요약
+    var ok = list.filter(function (c) { return c.name && c.course; });
+    var by = {};
+    ok.forEach(function (c) { by[c.course] = (by[c.course] || 0) + 1; });
+    $("sum").innerHTML = Object.keys(by).map(function (k) { return '<span class="chip">' + esc(k) + " " + by[k] + "장</span>"; }).join("");
+    var price = +$("price").value || 0;
+    $("total").textContent = "모두 " + ok.length + "장" + (price ? " · " + (ok.length * price).toLocaleString() + "원" : "");
+
+    var nErr = list.filter(function (c) { return c.warn.some(function (w) { return w.lv === "err"; }); }).length;
+    var nWarn = list.filter(function (c) { return c.warn.some(function (w) { return w.lv === "warn"; }); }).length;
+    var a = "";
+    if (nErr) a += '<div class="alert err">이름이나 단계가 빈 줄 ' + nErr + "개는 수료증에서 빠져요.</div>";
+    if (nWarn) a += '<div class="alert warn">확인이 필요한 줄이 ' + nWarn + "개 있어요. 노란 줄을 확인해 주세요.</div>";
+    $("alerts").innerHTML = a;
+    $("makeBtn").disabled = !ok.length;
+  }
+
+  $("sheetSel").addEventListener("change", function () {
+    var s = this.value; $("outName").value = baseName + (s ? " " + s : "") + " 수료증"; refresh();
+  });
+  $("onlyWarn").addEventListener("change", refresh);
+  $("price").addEventListener("input", refresh);
+
+  $("tbody").addEventListener("blur", function (ev) {
+    var el = ev.target, k = el.getAttribute && el.getAttribute("data-k");
+    if (!k) return;
+    var c = certs[+el.closest("tr").getAttribute("data-i")];
+    var v = el.textContent;
+    var nv = k === "school" ? Cert.normSchool(v) : k === "grade" ? Cert.normGrade(v) : k === "course" ? Cert.normCourse(v) : Cert.clean(v).replace(/\s/g, "");
+    if (nv !== c[k]) { c[k] = nv; refresh(); } else el.textContent = nv;
+  }, true);
+  $("tbody").addEventListener("keydown", function (ev) {
+    if (ev.key === "Enter" && ev.target.getAttribute("data-k")) { ev.preventDefault(); ev.target.blur(); }
+  });
+  $("tbody").addEventListener("click", function (ev) {
+    var b = ev.target.closest("button"); if (!b) return;
+    var c = certs[+b.closest("tr").getAttribute("data-i")];
+    if (b.getAttribute("data-act") === "del") {
+      if (confirm(c.name + " (" + c.course + ") 수료증을 빼까요?")) { certs.splice(certs.indexOf(c), 1); refresh(); }
+    } else preview(c);
+  });
+  $("addRow").addEventListener("click", function () {
+    certs.push({ name: "", school: "", grade: "", course: "", sheet: $("sheetSel").value || sheets[0] || "", src: 0 });
+    $("onlyWarn").checked = false; refresh();
+    var rows = $("tbody").querySelectorAll("tr"); var last = rows[rows.length - 1];
+    last.scrollIntoView({ block: "center" }); last.querySelector("[data-k=name]").focus();
+  });
+
+  // ---------- PDF ----------
+  var assetsP = null;
+  function loadAssets() {
+    if (!assetsP) {
+      var get = function (u) { return fetch(u).then(function (r) { if (!r.ok) throw new Error(u); return r.arrayBuffer(); }); };
+      assetsP = Promise.all([get("assets/serif-kr.ttf"), get("assets/serif-kr-bold.ttf"), get("assets/watermark.png"), get("assets/stamp.png")])
+        .then(function (a) { return { body: a[0], title: a[1], wm: a[2], stamp: a[3] }; })
+        .catch(function (e) { assetsP = null; throw e; });
+    }
+    return assetsP;
+  }
+  loadAssets().catch(function () {});
+
+  function preview(c) {
+    $("modalTitle").textContent = c.name + " · " + c.course;
+    $("modal").classList.remove("hidden");
+    $("modalFrame").removeAttribute("src");
+    loadAssets().then(function (a) { return Cert.buildPdf(PDFLib, fontkit, a, [c], YEAR); })
+      .then(function (bytes) {
+        var url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+        $("modalFrame").src = url;
+      }).catch(function (e) { console.error(e); alert("미리보기를 만들지 못했어요. 인터넷 연결을 확인해 주세요."); });
+  }
+  $("modalClose").addEventListener("click", function () { $("modal").classList.add("hidden"); });
+  $("modal").addEventListener("click", function (ev) { if (ev.target === this) this.classList.add("hidden"); });
+
+  $("makeBtn").addEventListener("click", function () {
+    var list = visible().filter(function (c) { return c.name && c.course; });
+    if (!list.length) return;
+    var btn = this; btn.disabled = true;
+    $("prog").classList.remove("hidden"); $("prog").firstElementChild.style.width = "15%";
+    $("makeMsg").textContent = list.length + "장을 만드는 중이에요…";
+    loadAssets().then(function (a) {
+      $("prog").firstElementChild.style.width = "45%";
+      return Cert.buildPdf(PDFLib, fontkit, a, list, YEAR);
+    }).then(function (bytes) {
+      $("prog").firstElementChild.style.width = "100%";
+      var name = ($("outName").value.trim() || "수료증").replace(/[\\/:*?"<>|]/g, "") + ".pdf";
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+      a.download = name; document.body.appendChild(a); a.click(); a.remove();
+      $("makeMsg").innerHTML = "✅ <b>" + esc(name) + "</b> (" + list.length + "장)을 저장했어요. 내려받은 파일에서 확인해 주세요.";
+    }).catch(function (e) {
+      console.error(e);
+      $("makeMsg").textContent = "만들지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.";
+    }).then(function () { btn.disabled = false; setTimeout(function () { $("prog").classList.add("hidden"); }, 800); });
+  });
+})();
+</script>
+</body>
+</html>
