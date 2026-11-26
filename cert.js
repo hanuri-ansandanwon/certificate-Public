@@ -97,14 +97,8 @@
       var school = normSchool(get("school"));
       var grade = normGrade(get("grade"));
       var note = clean(get("note"));
-      var courses = [];
-      if (note) {
-        var parts = note.split(/[+,/;]|그리고|및/).map(function (s) { return s.trim(); }).filter(Boolean);
-        if (parts.length && parts.every(function (p) { return isKnownCourse(p) || normCourse(p) === main; })) {
-          courses = parts.map(normCourse);
-        }
-      }
-      if (main && courses.indexOf(main) < 0) courses.push(main);
+      // 두 과정을 수료했으면 이름을 두 줄로 써요. 비고는 메모로만 써요.
+      var courses = main ? [main] : [];
       if (!courses.length) courses = [""];
       var seen = {};
       courses.forEach(function (c) {
@@ -134,7 +128,7 @@
       if (!c.school) w.push({ lv: "info", t: "학교가 비어 있어요" });
       var other = (byName[c.name + "|" + c.school] || []).filter(function (x) { return x.course !== c.course && (x.src !== c.src || x.sheet !== c.sheet); });
       if (c.name && other.length)
-        w.push({ lv: "info", t: "같은 학생이 다른 줄에도 있어요 (" + other.map(function (x) { return x.course; }).join(", ") + ")" });
+        w.push({ lv: "info", t: "다른 단계도 함께 수료해요 (" + other.map(function (x) { return x.course; }).join(", ") + ")" });
       c.warn = w;
     });
     return list;
